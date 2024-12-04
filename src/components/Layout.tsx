@@ -1,6 +1,5 @@
 import type { PropsWithChildren } from "react";
 import { Header } from "./Header";
-// import { Header } from "./header";
 
 export function Layout({ children }: PropsWithChildren) {
   return (
@@ -15,5 +14,5 @@ export function Layout({ children }: PropsWithChildren) {
         </div>
       </footer>
     </div>
-  );
-}
+  )
+};

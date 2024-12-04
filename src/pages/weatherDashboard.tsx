@@ -1,15 +1,20 @@
-import { CurrentWeather } from '@/components/currentWeather';
-import { HourlyTemperature } from '@/components/HourlyTemperature';
-import WeatherSkeleton from '@/components/LoadingSkeleton';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button'
-import { WeatherDetails } from '@/components/WeatherDetails';
-import { WeatherForecast } from '@/components/WeatherForeCast';
-import { useGeolocation } from '@/hooks/useGeoLocation';
-import { useForecastQuery, useReverseGeocodeQuery, useWeatherQuery } from '@/hooks/useWeather';
-import { AlertTriangle, MapPin, RefreshCw } from 'lucide-react'
+import {
+    useForecastQuery,
+    useReverseGeocodeQuery,
+    useWeatherQuery,
+} from "@/hooks/useWeather";
+import { CurrentWeather } from "../components/currentWeather";
+import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
+import { Button } from "../components/ui/button";
+import { MapPin, AlertTriangle, RefreshCw } from "lucide-react";
+import { useGeolocation } from "@/hooks/useGeoLocation";
+import { WeatherDetails } from "../components/WeatherDetails";
+import { WeatherForecast } from "../components/WeatherForeCast";
+import { HourlyTemperature } from "../components/HourlyTemperature";
+import WeatherSkeleton from "../components/LoadingSkeleton";
+import { FavoriteCities } from "@/components/FavoriteCities";
 
-const WeatherDashboard = () => {
+export function WeatherDashboard() {
     const {
         coordinates,
         error: locationError,
@@ -17,10 +22,11 @@ const WeatherDashboard = () => {
         getLocation,
     } = useGeolocation();
 
-    const locationQuery = useReverseGeocodeQuery(coordinates);
     const weatherQuery = useWeatherQuery(coordinates);
     const forecastQuery = useForecastQuery(coordinates);
+    const locationQuery = useReverseGeocodeQuery(coordinates);
 
+    // Function to refresh all data
     const handleRefresh = () => {
         getLocation();
         if (coordinates) {
@@ -52,10 +58,11 @@ const WeatherDashboard = () => {
 
     if (!coordinates) {
         return (
-            <Alert variant="destructive">
-                <AlertTitle>Location Error</AlertTitle>
+            <Alert>
+                <MapPin className="h-4 w-4" />
+                <AlertTitle>Location Required</AlertTitle>
                 <AlertDescription className="flex flex-col gap-4">
-                    <p>Please enable your location access to see your local weather</p>
+                    <p>Please enable location access to see your local weather.</p>
                     <Button variant="outline" onClick={getLocation} className="w-fit">
                         <MapPin className="mr-2 h-4 w-4" />
                         Enable Location
@@ -89,7 +96,7 @@ const WeatherDashboard = () => {
 
     return (
         <div className="space-y-4">
-            {/* <FavoriteCities /> */}
+            <FavoriteCities />
             <div className="flex items-center justify-between">
                 <h1 className="text-xl font-bold tracking-tight">My Location</h1>
                 <Button
@@ -99,7 +106,8 @@ const WeatherDashboard = () => {
                     disabled={weatherQuery.isFetching || forecastQuery.isFetching}
                 >
                     <RefreshCw
-                        className={`h-4 w-4 ${weatherQuery.isFetching ? "animate-spin" : ""} `}
+                        className={`h-4 w-4 ${weatherQuery.isFetching ? "animate-spin" : ""
+                            }`}
                     />
                 </Button>
             </div>
@@ -114,12 +122,10 @@ const WeatherDashboard = () => {
                 </div>
 
                 <div className="grid gap-6 md:grid-cols-2 items-start">
-                     <WeatherDetails data={weatherQuery.data} />
+                    <WeatherDetails data={weatherQuery.data} />
                     <WeatherForecast data={forecastQuery.data} />
                 </div>
             </div>
         </div>
-    )
-}
-
-export default WeatherDashboard
+    );
+};
