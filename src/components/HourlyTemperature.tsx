@@ -14,7 +14,7 @@ interface ChartData {
     feels_like: number;
 }
 
-const HourlyTemperature = ({ data }: HourlyTemperatureProps) => {
+export const HourlyTemperature = ({ data }: HourlyTemperatureProps) => {
 
     const chartData: ChartData[] = data.list
         .slice(0, 8) // Get next 24 hours (3-hour intervals)
@@ -96,7 +96,5 @@ const HourlyTemperature = ({ data }: HourlyTemperatureProps) => {
                 </div>
             </CardContent>
         </Card>
-    )
-}
-
-export default HourlyTemperature
+    );
+};
